@@ -3,11 +3,33 @@
 * Concatinates and minifies JavaScript and CSS
 * Provides view helpers
 
-[See examples folder for sample apps](https://github.com/peteog/sinatra-simple-assets/tree/master/examples)
+[See examples directory for sample apps](https://github.com/peteog/sinatra-simple-assets/tree/master/examples)
 
-## View helper output
+## Usage
 
-### CSS
+### In the app
+
+    assets do
+      css :application, [
+        '/stylesheets/bootstrap.css',
+        '/stylesheets/application.css'
+      ]
+      js :application, [
+        '/javascripts/bootstrap-modal.js',
+        '/javascripts/bootstrap-dropdown.js',
+        '/javascripts/bootstrap-scrollspy.js',
+        '/javascripts/bootstrap-buttons.js',
+        '/javascripts/bootstrap-tabs.js',
+        '/javascripts/bootstrap-twipsy.js',
+        '/javascripts/bootstrap-popover.js',
+        '/javascripts/bootstrap-alerts.js',
+        '/javascripts/application.js'
+      ]
+    end
+
+### In the views
+
+#### CSS
 
     <%= stylesheet :application %>
 
@@ -20,7 +42,7 @@ production:
 
     <link rel="stylesheet" href="http://localhost:9292/stylesheets/application-1d512aa30517f9c05c6fc81258c586caeafc1136.css">
 
-### JavaScript
+#### JavaScript
 
     <%= javascript :application %>
 
@@ -39,3 +61,18 @@ development:
 production:
 
     <script src="http://localhost:9292/javascripts/application-2e4cd283a08121a850c0117a1ca64648e34cce98.js"></script>
+
+## Precompiling
+
+    # Rakefile
+    require "#{File.dirname(__FILE__)}/app"
+
+    namespace :assets do
+      desc 'Precompile assets'
+      task :precompile do
+       App.assets.precompile
+       # Sinatra::Application.assets.precompile # classic apps
+      end
+    end
+
+[See examples directory for sample apps](https://github.com/peteog/sinatra-simple-assets/tree/master/examples)
