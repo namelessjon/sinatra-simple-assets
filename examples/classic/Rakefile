@@ -1,11 +1,11 @@
 task :environment do
-  Bundler.require(:default, ENV['RACK_ENV'])
+  Bundler.require(:default)
   require "#{File.dirname(__FILE__)}/app"
 end
 
 namespace :assets do
   desc 'Precompile assets'
   task :precompile => :environment do
-    App.assets.precompile
+    Sinatra::Application.assets.precompile
   end
 end
