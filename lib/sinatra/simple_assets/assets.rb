@@ -2,8 +2,8 @@ require 'sinatra/simple_assets/bundle'
 module Sinatra
   module SimpleAssets
     class Assets
-      def initialize(app, &block)
-        @app    = app
+      def initialize(root, &block)
+        @root    = root
         @bundles = {}
         @hashes  = {}
         instance_eval(&block)
@@ -18,15 +18,15 @@ module Sinatra
       end
 
       def create_bundle(name, type, files)
-        bundle = Bundle.new(name, type, @app.public_folder, files)
+        bundle = Bundle.new(name, type, @root, files)
         @bundles[bundle.name] = bundle
       end
 
-      def paths_for(bundle)
+      def paths_for(bundle, environment = :development)
         bundle = @bundles[bundle]
         return [] unless bundle
 
-        if @app.environment == :production
+        if environment == :production
           @hashes[bundle.hash_name] = bundle.name
           [bundle.hashed_path]
         else

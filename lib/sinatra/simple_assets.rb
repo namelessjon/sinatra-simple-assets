@@ -5,20 +5,20 @@ module Sinatra
   module SimpleAssets
     module Helpers
       def stylesheet(bundle)
-        settings.assets.paths_for("#{bundle}.css").map do |file|
+        settings.assets.paths_for("#{bundle}.css", settings.environment).map do |file|
           "<link rel=\"stylesheet\" href=\"#{url(file)}\">"
         end.join("\n")
       end
 
       def javascript(bundle)
-        settings.assets.paths_for("#{bundle}.js").map do |file|
+        settings.assets.paths_for("#{bundle}.js", settings.environment).map do |file|
           "<script src=\"#{url(file)}\"></script>"
         end.join("\n")
       end
     end
 
     def assets(&block)
-      @assets ||= Assets.new(self, &block)
+      @assets ||= Assets.new(self.public_folder, &block)
     end
 
     def self.registered(app)
