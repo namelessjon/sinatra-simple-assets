@@ -35,7 +35,7 @@ module Sinatra
           etag bundle if exists
           not_found unless exists
 
-          cache_control :public, :must_revalidate, :max_age => 86400
+          cache_control :public, :max_age => 2592000 # one month
 
           content_type r[:type]
           assets.content_for(bundle)
