@@ -28,8 +28,7 @@ module Sinatra
         { :route => '/stylesheets', :type => :css },
         { :route => '/javascripts', :type => :js }
       ].each do |r|
-        app.get "#{r[:route]}/:bundle" do
-          bundle = params[:bundle]
+        app.get "#{r[:route]}/:bundle" do |bundle|
           assets = settings.assets
           exists = assets.bundle_exists?(bundle)
 
