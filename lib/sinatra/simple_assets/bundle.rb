@@ -16,21 +16,15 @@ module Sinatra
       end
 
       def hash_name
-        "#{@name}-#{hash}.#{@type}"
+        "#{@name}-#{asset_hash}.#{@type}"
       end
 
       def hashed_path
         "#{path}/#{hash_name}"
       end
 
-      def hash
-        @hash ||= begin
-                    Digest::SHA1.hexdigest content
-                  rescue
-                    # Find the most recent compressed version if the JS runtime is unavailable
-                    fname = Dir.glob("#{@root}/#{path}/#{@name}-*.#{@type}").sort_by {|f| File.mtime(f)}.last
-                    fname.split('-').last.sub(".#{@type}", "")
-                  end
+      def asset_hash
+        @asset_hash ||= Digest::SHA1.hexdigest(combined)
       end
 
       def content
