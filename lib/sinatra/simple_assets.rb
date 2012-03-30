@@ -30,10 +30,12 @@ module Sinatra
       ].each do |r|
         app.get "#{r[:route]}/:bundle" do |bundle|
           assets = settings.assets
-          exists = assets.bundle_exists?(bundle)
 
-          etag bundle if exists
-          not_found unless exists
+          if assets.bundle_exists?(bundle)
+            etag bundle
+          else
+            not_found
+          end
 
           cache_control :public, :max_age => 2592000 # one month
 
