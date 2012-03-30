@@ -18,8 +18,9 @@ module Sinatra
       end
 
       def create_bundle(name, type, files)
-        bundle = Bundle.new(name, type, @root, files)
-        @bundles[bundle.name] = bundle
+        bundle                      = Bundle.new(name, type, @root, files)
+        @bundles[bundle.name]       = bundle
+        @hashes[bundle.hashed_path] = bundle
       end
 
       def paths_for(bundle, environment = :development)
@@ -27,7 +28,6 @@ module Sinatra
         return [] unless bundle
 
         if environment == :production
-          @hashes[bundle.hash_name] = bundle.name
           [bundle.hashed_path]
         else
           bundle.files
@@ -35,7 +35,7 @@ module Sinatra
       end
 
       def content_for(bundle)
-        bundle = @bundles[@hashes[bundle]]
+        bundle = @hashes[bundle]
         bundle.content if bundle
       end
 
