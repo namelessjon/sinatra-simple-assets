@@ -26,6 +26,7 @@ module Sinatra
         bundle                      = Bundle.new(name, type, @root, files)
         @bundles[bundle.name]       = bundle
         @hashes[bundle.hashed_path] = bundle
+        self
       end
 
       def paths_for(bundle, environment = :development)
@@ -48,6 +49,7 @@ module Sinatra
         @bundles.values.each do |bundle|
           bundle.compile
         end
+        self
       end
 
       def bundle_exists?(bundle)
