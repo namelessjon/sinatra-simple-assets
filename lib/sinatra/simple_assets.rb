@@ -17,8 +17,8 @@ module Sinatra
       end
     end
 
-    def assets(&block)
-      @assets ||= Assets.new(self.public_folder)
+    def assets(assets = nil, &block)
+      @assets ||= (assets ? assets : Assets.new(self.public_folder))
       @assets.configure(&block)
     end
 
