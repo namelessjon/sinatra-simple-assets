@@ -45,7 +45,7 @@ module Sinatra
       end
 
       def path
-        @type == :js ? 'javascripts' : 'stylesheets'
+        @type.to_s
       end
 
       def compile

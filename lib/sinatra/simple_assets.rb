@@ -25,8 +25,8 @@ module Sinatra
       app.helpers SimpleAssets::Helpers
 
       [
-        { :route => '/stylesheets', :type => :css },
-        { :route => '/javascripts', :type => :js }
+        { :route => '/css', :type => :css },
+        { :route => '/js', :type => :js }
       ].each do |r|
         app.get "#{r[:route]}/:bundle" do |bundle|
           assets = settings.assets
