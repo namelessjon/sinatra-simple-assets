@@ -2,10 +2,11 @@ require 'sinatra/simple_assets/bundle'
 module Sinatra
   module SimpleAssets
     class Assets
-      def initialize(root, &block)
-        @root    = root
-        @bundles = {}
-        @hashes  = {}
+      def initialize(root, asset_root=root, &block)
+        @root       = root
+        @asset_root = asset_root
+        @bundles    = {}
+        @hashes     = {}
         configure(&block)
       end
 
@@ -23,7 +24,7 @@ module Sinatra
       end
 
       def create_bundle(name, type, files)
-        bundle                      = Bundle.new(name, type, @root, files)
+        bundle                      = Bundle.new(name, type, @root, @asset_root, files)
         @bundles[bundle.name]       = bundle
         @hashes[bundle.hashed_path] = bundle
         self

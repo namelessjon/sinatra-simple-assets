@@ -4,11 +4,12 @@ module Sinatra
     class Bundle
       attr_accessor :files
 
-      def initialize(name, type, root, files)
-        @name = name
-        @type = type
-        @root = root
-        @files = files
+      def initialize(name, type, root, asset_root, files)
+        @name       = name
+        @type       = type
+        @root       = root
+        @asset_root = asset_root
+        @files      = files
       end
 
       def name
@@ -40,7 +41,7 @@ module Sinatra
 
       def combined
         @combined ||= @files.map do |file|
-          File.open(@root + file) { |f| f.read }
+          File.open(@asset_root + file) { |f| f.read }
         end.join("\n")
       end
 
