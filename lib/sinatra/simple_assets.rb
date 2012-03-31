@@ -18,12 +18,14 @@ module Sinatra
     end
 
     def assets(assets = nil, &block)
-      @assets ||= (assets ? assets : Assets.new(self.public_folder))
+      @assets ||= (assets ? assets : Assets.new(self.public_folder, self.asset_root))
       @assets.configure(&block)
     end
 
     def self.registered(app)
       app.helpers SimpleAssets::Helpers
+
+      set :asset_root, self.public_folder
 
       [
         { :route => '/css', :type => :css },
