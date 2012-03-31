@@ -6,7 +6,12 @@ module Sinatra
         @root    = root
         @bundles = {}
         @hashes  = {}
-        instance_eval(&block)
+        configure(&block)
+      end
+
+      def configure(&block)
+        instance_eval(&block) if block_given?
+        self
       end
 
       def css(bundle, files)

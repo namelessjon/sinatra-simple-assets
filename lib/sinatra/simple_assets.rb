@@ -18,7 +18,8 @@ module Sinatra
     end
 
     def assets(&block)
-      @assets ||= Assets.new(self.public_folder, &block)
+      @assets ||= Assets.new(self.public_folder)
+      @assets.configure(&block)
     end
 
     def self.registered(app)
