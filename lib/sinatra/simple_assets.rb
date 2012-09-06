@@ -25,7 +25,7 @@ module Sinatra
     def self.registered(app)
       app.helpers SimpleAssets::Helpers
 
-      set :asset_root, self.public_folder
+      app.set :asset_root, app.public_folder
 
       [
         { :route => '/css', :type => :css },
