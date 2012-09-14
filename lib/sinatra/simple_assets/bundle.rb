@@ -12,6 +12,10 @@ module Sinatra
         @files      = files
       end
 
+      def inspect
+        "#<#{self.class.name} @name=#{@name.inspect} @hash_name=#{hash_name}>"
+      end
+
       def name
         "#{@name}.#{@type}"
       end
@@ -36,13 +40,27 @@ module Sinatra
         when :css
           require 'cssmin'
           @content ||= CSSMin.minify combined
+        when :hbs
+          require 'uglifier'
+          require 'sinatra/simple_assets/handlebars'
+          @content ||= begin
+                         u = Uglifier.new
+                         s = *files.map { |f| [File.basename(f), file_content(f)] }
+                         u.compress Handlebars.wrap(Hash[s])
+                       end
         end
       end
 
       def combined
         @combined ||= @files.map do |file|
-          File.open(@asset_root + file) { |f| f.read }
+          file_content(file)
         end.join("\n")
+      end
+
+      def file_content(file)
+        File.read(@asset_root + file)
+      rescue Errno::ENOENT
+        File.read(@asset_root + file + ".#{@type}")
       end
 
       def path

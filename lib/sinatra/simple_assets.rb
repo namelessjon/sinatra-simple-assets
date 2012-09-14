@@ -15,6 +15,12 @@ module Sinatra
           "<script src=\"#{url(file)}\"></script>"
         end.join("\n")
       end
+
+      def hbs(bundle)
+        settings.assets.paths_for("#{bundle}.hbs", settings.environment).map do |file|
+          "<script src=\"#{url(file)}\"></script>"
+        end.join("\n")
+      end
     end
 
     def assets(assets = nil, &block)
@@ -29,7 +35,8 @@ module Sinatra
 
       [
         { :route => '/css', :type => :css },
-        { :route => '/js', :type => :js }
+        { :route => '/js', :type => :js },
+        { :route => '/hbs', :type => :js }
       ].each do |r|
         app.get "#{r[:route]}/:bundle" do |bundle|
           assets = settings.assets
@@ -46,8 +53,16 @@ module Sinatra
           assets.content_for(bundle)
         end
       end
+
+      app.get "/js/views/:template" do |template|
+        path = File.join(app.public_folder, 'js', 'views', "#{template}.hbs")
+        not_found unless File.file?(path)
+        require 'sinatra/simple_assets/handlebars'
+        content_type :js
+        Handlebars.wrap(template => File.read(path))
+      end
     end
-  end
+   end
 
   register SimpleAssets
 end

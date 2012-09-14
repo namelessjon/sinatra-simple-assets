@@ -23,10 +23,14 @@ module Sinatra
         create_bundle(bundle, :js, files)
       end
 
+      def hbs(bundle, files)
+        create_bundle(bundle, :hbs, files)
+      end
+
       def create_bundle(name, type, files)
         bundle                      = Bundle.new(name, type, @root, @asset_root, files)
         @bundles[bundle.name]       = bundle
-        @hashes[bundle.hashed_path] = bundle
+        @hashes[bundle.hash_name] = bundle
         self
       end
 
