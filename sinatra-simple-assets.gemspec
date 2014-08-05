@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   }
   s.require_paths = ['lib']
 
-  s.add_dependency 'cssmin', '~> 1.0.2'
-  s.add_dependency 'sinatra', '~> 1.3.0'
-  s.add_dependency 'uglifier', '~> 1.2.0'
+  s.add_dependency 'cssmin'
+  s.add_dependency 'sinatra'
+  s.add_dependency 'uglifier'
 end
