@@ -2,7 +2,7 @@ require 'sinatra/simple_assets/bundle'
 require 'cssmin'
 module Sinatra
   module SimpleAssets
-    class CssBundle
+    class CssBundle < Bundle
       attr_accessor :files
 
       def type

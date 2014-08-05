@@ -4,7 +4,7 @@ require 'sinatra/simple_assets/handlebars'
 
 module Sinatra
   module SimpleAssets
-    class JsBundle
+    class JsBundle < Bundle
       attr_accessor :files
 
       def type
