@@ -23,6 +23,14 @@ module Sinatra
         "#{@name}.#{type}"
       end
 
+      def content_for(file)
+        if file_exist?(file)
+          file_content(file)
+        else
+          nil
+        end
+      end
+
       def hash_name
         "#{@name}-#{asset_hash}.#{type}"
       end
@@ -50,6 +58,11 @@ module Sinatra
       rescue Errno::ENOENT
         File.read(@asset_root + file + ".#{type}")
       end
+
+      def file_exist?(file)
+        File.file?(@asset_root + file) || File.file?(@asset_root + file + ".#{type}")
+      end
+
 
       def path
         type.to_s

@@ -44,8 +44,12 @@ module Sinatra
       end
 
       def content_for(bundle)
-        bundle = @hashes[bundle]
-        bundle.content if bundle
+        bundle = @hashes[bundle] || @bundles[bundle]
+        if bundle # if it's a full bundle, just return the content
+          bundle.content
+        else # otherwize, loop over all the bundles, looking.
+          @bundles.values.lazy.select { |b| b.content_for(bundle) }.first
+        end
       end
 
       def precompile
@@ -56,7 +60,11 @@ module Sinatra
       end
 
       def bundle_exists?(bundle)
-        @hashes[bundle]
+        @hashes[bundle] || @bundles[bundle] 
+      end
+
+      def file_exists?(file)
+        @bundles.values.lazy.select { |b| b.file_exists?(bundle) }.any?
       end
     end
   end

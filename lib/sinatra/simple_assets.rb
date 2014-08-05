@@ -32,11 +32,13 @@ module Sinatra
         { :route => '/js', :type => :js },
         { :route => '/hbs', :type => :js }
       ].each do |r|
-        app.get "#{r[:route]}/:bundle" do |bundle|
+        app.get "#{r[:route]}/*" do |splat|
+          bundle = splat.join('/')
           assets = settings.assets
 
           if assets.bundle_exists?(bundle)
             etag bundle
+          elsif assets.file_exists?(bundle)
           else
             not_found
           end
@@ -44,13 +46,13 @@ module Sinatra
           cache_control :public, :max_age => 2592000 # one month
 
           content_type r[:type]
-          assets.content_for(bundle)
+          assets.content_for(bundle) || assets.content_for(File.join(r[:route], bundle)
         end
       end
 
       app.get "/js/views/:template" do |template|
         template = File.basename(template, ".hbs")
-        path = File.join(app.public_folder, 'js', 'views', "#{template}.hbs")
+        path = File.join(app.asset_root, 'js', 'views', "#{template}.hbs")
         not_found unless File.file?(path)
         require 'sinatra/simple_assets/handlebars'
         content_type :js
