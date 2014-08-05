@@ -15,12 +15,6 @@ module Sinatra
           "<script src=\"#{url(file)}\"></script>"
         end.join("\n")
       end
-
-      def hbs(bundle)
-        settings.assets.paths_for("#{bundle}.hbs", settings.environment).map do |file|
-          "<script src=\"#{url(file)}\"></script>"
-        end.join("\n")
-      end
     end
 
     def assets(assets = nil, &block)

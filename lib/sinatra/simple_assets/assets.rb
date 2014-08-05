@@ -1,4 +1,6 @@
-require 'sinatra/simple_assets/bundle'
+require 'sinatra/simple_assets/js_bundle'
+require 'sinatra/simple_assets/css_bundle'
+
 module Sinatra
   module SimpleAssets
     class Assets
@@ -16,19 +18,15 @@ module Sinatra
       end
 
       def css(bundle, files)
-        create_bundle(bundle, :css, files)
+        create_bundle(CssBundle, bundle, files)
       end
 
       def js(bundle, files)
-        create_bundle(bundle, :js, files)
+        create_bundle(JsBundle, bundle, files)
       end
 
-      def hbs(bundle, files)
-        create_bundle(bundle, :hbs, files)
-      end
-
-      def create_bundle(name, type, files)
-        bundle                      = Bundle.new(name, type, @root, @asset_root, files)
+      def create_bundle(klass, name, files)
+        bundle                      = klass.new(name, @root, @asset_root, files)
         @bundles[bundle.name]       = bundle
         @hashes[bundle.hash_name] = bundle
         self

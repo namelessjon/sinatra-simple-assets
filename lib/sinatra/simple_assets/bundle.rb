@@ -4,12 +4,15 @@ module Sinatra
     class Bundle
       attr_accessor :files
 
-      def initialize(name, type, root, asset_root, files)
+      def initialize(name, root, asset_root, files)
         @name       = name
-        @type       = type
         @root       = root
         @asset_root = asset_root
         @files      = files
+      end
+
+      def type
+        :txt
       end
 
       def inspect
@@ -17,11 +20,11 @@ module Sinatra
       end
 
       def name
-        "#{@name}.#{@type}"
+        "#{@name}.#{type}"
       end
 
       def hash_name
-        "#{@name}-#{asset_hash}.#{@type}"
+        "#{@name}-#{asset_hash}.#{type}"
       end
 
       def hashed_path
@@ -33,22 +36,7 @@ module Sinatra
       end
 
       def content
-        case @type
-        when :js
-          require 'uglifier'
-          @content ||= Uglifier.new.compress combined
-        when :css
-          require 'cssmin'
-          @content ||= CSSMin.minify combined
-        when :hbs
-          require 'uglifier'
-          require 'sinatra/simple_assets/handlebars'
-          @content ||= begin
-                         u = Uglifier.new
-                         s = *files.map { |f| [File.basename(f), file_content(f)] }
-                         u.compress Handlebars.wrap(Hash[s])
-                       end
-        end
+        combined
       end
 
       def combined
@@ -60,11 +48,11 @@ module Sinatra
       def file_content(file)
         File.read(@asset_root + file)
       rescue Errno::ENOENT
-        File.read(@asset_root + file + ".#{@type}")
+        File.read(@asset_root + file + ".#{type}")
       end
 
       def path
-        @type.to_s
+        type.to_s
       end
 
       def compile
