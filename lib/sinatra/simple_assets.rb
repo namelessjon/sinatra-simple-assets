@@ -49,6 +49,7 @@ module Sinatra
       end
 
       app.get "/js/views/:template" do |template|
+        template = File.basename(template, ".hbs")
         path = File.join(app.public_folder, 'js', 'views', "#{template}.hbs")
         not_found unless File.file?(path)
         require 'sinatra/simple_assets/handlebars'
