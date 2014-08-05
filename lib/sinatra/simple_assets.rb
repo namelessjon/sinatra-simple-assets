@@ -27,28 +27,6 @@ module Sinatra
 
       app.set :asset_root, app.public_folder
 
-      [
-        { :route => '/css', :type => :css },
-        { :route => '/js', :type => :js },
-        { :route => '/hbs', :type => :js }
-      ].each do |r|
-        app.get "#{r[:route]}/*" do |splat|
-          bundle = splat.join('/')
-          assets = settings.assets
-
-          if assets.bundle_exists?(bundle)
-            etag bundle
-          elsif assets.file_exists?(bundle)
-          else
-            not_found
-          end
-
-          cache_control :public, :max_age => 2592000 # one month
-
-          content_type r[:type]
-          assets.content_for(bundle) || assets.content_for(File.join(r[:route], bundle)
-        end
-      end
 
       app.get "/js/views/:template" do |template|
         template = File.basename(template, ".hbs")
@@ -58,6 +36,32 @@ module Sinatra
         content_type :js
         Handlebars.wrap(template => File.read(path))
       end
+
+      [
+        { :route => '/css', :type => :css },
+        { :route => '/js', :type => :js },
+        { :route => '/hbs', :type => :js }
+      ].each do |r|
+        app.get "#{r[:route]}/*" do |bundle|
+          assets = settings.assets
+          # full name of the file, if it's a file and not a bundle
+          file_name = File.join(r[:route], bundle)
+
+          if assets.bundle_exists?(bundle)
+            etag bundle
+          cache_control :public, :max_age => 2592000 # one month
+          elsif assets.file_exists?(file_name)
+            cache_control :public, :must_revalidate, :max_age => 0
+          else
+            not_found
+          end
+
+
+          content_type r[:type]
+          assets.content_for(bundle) || assets.content_for(file_name)
+        end
+      end
+
     end
    end
 

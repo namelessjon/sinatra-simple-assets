@@ -44,11 +44,11 @@ module Sinatra
       end
 
       def content_for(bundle)
-        bundle = @hashes[bundle] || @bundles[bundle]
-        if bundle # if it's a full bundle, just return the content
-          bundle.content
+        b = @hashes[bundle] || @bundles[bundle]
+        if b # if it's a full bundle, just return the content
+          b.content
         else # otherwize, loop over all the bundles, looking.
-          @bundles.values.lazy.select { |b| b.content_for(bundle) }.first
+          @bundles.values.lazy.map { |b| b.content_for(bundle) }.select { |c| !c.nil? }.first
         end
       end
 
@@ -64,7 +64,7 @@ module Sinatra
       end
 
       def file_exists?(file)
-        @bundles.values.lazy.select { |b| b.file_exists?(bundle) }.any?
+        @bundles.values.lazy.select { |b| b.file_exist?(file) }.any?
       end
     end
   end

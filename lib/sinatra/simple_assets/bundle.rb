@@ -60,7 +60,7 @@ module Sinatra
       end
 
       def file_exist?(file)
-        File.file?(@asset_root + file) || File.file?(@asset_root + file + ".#{type}")
+        files.include?(file)
       end
 
 
