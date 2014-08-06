@@ -29,7 +29,7 @@ module Sinatra
 
       def hbs_content(files)
         # read in the file contents, and have the function names
-        contents = *files.map { |file| [File.basename(f, ".hbs"), file_content(file)] }
+        contents = *files.map { |file| [File.basename(file, ".hbs"), file_content(file)] }
         # Process the contents with handlebars, and wrap it in the nice wrapper for better minification
         Handlebars.wrap(Hash[contents])
       end
