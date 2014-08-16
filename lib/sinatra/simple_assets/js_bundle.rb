@@ -18,9 +18,48 @@ module Sinatra
       private
 
       def combined_content
-        js, hbs = files.partition { |f| File.extname(f) == ".js" }
+        combined  = []
+        last_type = nil
+        temp      = []
 
-        "#{js_content(js)}\n#{hbs_content(hbs)}"
+        files.each do |file|
+          type = file_type(file)
+
+          if type != last_type
+            # if we have files, combine them and add them
+            unless temp.empty?
+              combined << combine_content(last_type, temp)
+            end
+            temp.clear
+          end
+
+          last_type = type
+          temp      << file
+        end
+        combined << combine_content(last_type, temp)
+        combined.join("\n")
+      end
+
+      def file_type(file)
+        case File.extname(file)
+        when '.js'
+          :js
+        when '.hbs'
+          :hbs
+        else
+          raise "Unknown extension on '#{file}'"
+        end
+      end
+
+      def combine_content(type, files)
+        case type
+        when :js
+          js_content files
+        when :hbs
+          hbs_content files
+        else
+          raise "unknown type"
+        end
       end
 
       def js_content(files)
