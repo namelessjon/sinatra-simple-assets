@@ -38,7 +38,7 @@ module Sinatra
         end
 
         def path
-          @path ||= assets_path.join('handlebars.js')
+          @path ||= assets_path.join('handlebars-v3.0.3.js')
         end
 
         def assets_path
