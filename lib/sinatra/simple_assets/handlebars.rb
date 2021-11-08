@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # Based on https://github.com/josh/ruby-coffee-script
-require 'execjs'
+
 require 'pathname'
 
 module Sinatra
@@ -30,6 +30,7 @@ module Sinatra
         private
 
         def context
+          require 'execjs'
           @context ||= ExecJS.compile(source)
         end
 

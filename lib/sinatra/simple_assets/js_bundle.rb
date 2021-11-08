@@ -1,5 +1,4 @@
 require 'sinatra/simple_assets/bundle'
-require 'uglifier'
 require 'sinatra/simple_assets/handlebars'
 
 module Sinatra
@@ -12,6 +11,7 @@ module Sinatra
       end
 
       def content
+        require 'uglifier'
         @content ||= Uglifier.new.compress combined_content
       end
 
