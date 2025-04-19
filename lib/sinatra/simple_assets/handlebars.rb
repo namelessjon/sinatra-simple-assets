@@ -40,7 +40,7 @@ module Sinatra
 
         def path
           require 'handlebars/source'
-          @path ||= ::Handlebars::Source.bundled_path
+          @path ||= Pathname(::Handlebars::Source.bundled_path)
         end
       end
     end
