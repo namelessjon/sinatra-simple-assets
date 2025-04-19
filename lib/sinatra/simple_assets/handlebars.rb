@@ -39,11 +39,8 @@ module Sinatra
         end
 
         def path
-          @path ||= assets_path.join('handlebars-v3.0.3.js')
-        end
-
-        def assets_path
-          @assets_path ||= Pathname(__FILE__).dirname.join('..', '..', '..', 'vendor')
+          require 'handlebars/source'
+          @path ||= Handlebars::Source.bundled_path
         end
       end
     end

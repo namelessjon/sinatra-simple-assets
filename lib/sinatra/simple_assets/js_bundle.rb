@@ -11,8 +11,8 @@ module Sinatra
       end
 
       def content
-        require 'uglifier'
-        @content ||= Uglifier.new.compress combined_content
+        require 'terser'
+        @content ||= Terser.new.compile combined_content
       end
 
       private
